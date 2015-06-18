@@ -1444,14 +1444,15 @@ class Point(LatLon):
     Common base class for track points (class TrackPoint), route points (class RoutePoint)
     and waypoints (class Waypoint)
 
-    Constructor: Point(lat, lon, ele=None, t=None, name=None)
+    Constructor: Point(lat, lon, ele=None, t=None, name=None, description=None)
     """
 
-    def __init__ (self, lat, lon, ele=None, t=None, name=None):
+    def __init__ (self, lat, lon, ele=None, t=None, name=None, description=None):
         LatLon.__init__(self, lat, lon)
         self.ele = ele
         self.t = t
         self.name = name
+        self.description = description
 
     def __str__ (self):
         s = [ self.__class__.__name__, '(', str(self._lat), ',', str(self._lon) ]
@@ -1461,12 +1462,14 @@ class Point(LatLon):
             s += [ ',t=', str(self.t) ]
         if self.name != None:
             s += [ ',name=', unicode(self.name) ]
+        if self.description != None:
+            s += [ ',description=', unicode(self.description) ]
         s.append(')')
         return ''.join(s)
 
     def __repr__ (self):
         s = [ self.__class__.__name__, '(', repr(self._lat), ',', repr(self._lon),
-              ',',  repr(self.ele), ',', repr(self.t), ',', repr(self.name), ')' ]
+              ',',  repr(self.ele), ',', repr(self.t), ',', repr(self.name), ',', repr(self.description), ')' ]
         return ''.join(s)
 
     def __eq__ (self, p):
@@ -1474,13 +1477,14 @@ class Point(LatLon):
             self.__class__ == p.__class__
             and self._lat == p._lat and self._lon == p._lon
             and self.ele == p.ele and self.t == p.t
-            and self.name == p.name)
+            and self.name == p.name
+            and self.description == p.description)
 
     def __ne__ (self, p):
         return not (self == p)
 
     def __hash__ (self):
-        return hash((self.lat, self.lon, self.ele, self.t, self.name))
+        return hash((self.lat, self.lon, self.ele, self.t, self.name, self.description))
 
     @classmethod
     def cast (cls, obj):
@@ -1497,6 +1501,8 @@ class Point(LatLon):
                 p.t = obj.t
             if hasattr(obj, "name"):
                 p.name = obj.name
+            if hasattr(obj, "description"):
+                p.description = obj.description                
             return p
         else:
             raise TypeError
@@ -1512,6 +1518,10 @@ class Point(LatLon):
             e = doc.createElement("name")
             e.appendChild (doc.createTextNode(self.name))
             res.appendChild (e)
+        if self.description != None:
+            e = doc.createElement("desc")
+            e.appendChild (doc.createTextNode(self.description))
+            res.appendChild (e)            
         if self.ele != None:
             e = doc.createElement("ele")
             e.appendChild (doc.createTextNode(str(self.ele)))
@@ -1533,13 +1543,16 @@ class Point(LatLon):
         name = None
         for e in element.getElementsByTagName("name"):
             name = e.childNodes[0].data.strip()
+        description = None
+        for e in element.getElementsByTagName("desc"):
+            description = e.childNodes[0].data.strip()            
         ele = None
         for e in element.getElementsByTagName("ele"):
             ele = float(e.childNodes[0].data.strip())
         t = None
         for e in element.getElementsByTagName("time"):
             t = dateutil.parser.parse (e.childNodes[0].data.strip())
-        return cls (lat, lon, ele, t, name)
+        return cls (lat, lon, ele, t, name, description)
 
 # ----------------------------------------
 # Representation of a GPX track point
@@ -1548,7 +1561,7 @@ class TrackPoint(Point):
     """
     Representation of a GPX track point
 
-    Constructor: TrackPoint(lat, lon, ele=None, t=None, name=None)
+    Constructor: TrackPoint(lat, lon, ele=None, t=None, name=None, description=None)
     """
 
     def toGPX (self, doc):
@@ -1573,7 +1586,7 @@ class RoutePoint(Point):
     """
     Representation of a GPX route point
 
-    Constructor: RoutePoint(lat, lon, ele=None, t=None, name=None)
+    Constructor: RoutePoint(lat, lon, ele=None, t=None, name=None, description=None)
     """
 
     def toGPX (self, doc):
@@ -1598,7 +1611,7 @@ class Waypoint(Point):
     """
     Representation of a GPX waypoint
 
-    Constructor: Waypoint(lat, lon, ele=None, t=None, name=None)
+    Constructor: Waypoint(lat, lon, ele=None, t=None, name=None, description=None)
 
     Note: the order of constructor parameters has changed in version 1.2.0
     (name is now last) to be consistent with TrackPoint and RoutePoint
@@ -1618,6 +1631,10 @@ class Waypoint(Point):
         if self.name != None:
             e = doc.createElement ("name")
             e.appendChild (doc.createTextNode (self.name))
+            res.appendChild (e)
+        if self.description != None:
+            e = doc.createElement ("description")
+            e.appendChild (doc.createTextNode (self.description))
             res.appendChild (e)
         if self.t != None:
             ts = doc.createElement ("TimeStamp")
@@ -1644,6 +1661,8 @@ class Waypoint(Point):
         name = "(unnamed)"
         for e in placemark.getElementsByTagName ("name"):
             name = e.childNodes[0].data.strip()
+        for d in placemark.getElementsByTagName ("description"):
+            description = d.childNodes[0].data.strip()            
         for p in placemark.getElementsByTagName ("Point"):
             coords = p.getElementsByTagName("coordinates")[0].childNodes[0].data.strip()
             lon, lat, ele = coords.split (",")
@@ -1657,4 +1676,4 @@ class Waypoint(Point):
         for ts in placemark.getElementsByTagName ("TimeStamp"):
             for e in ts.getElementsByTagName ("when"):
                 t = dateutil.parser.parse (e.childNodes[0].data.strip())
-        return Waypoint (lat, lon, ele, t, name)
+        return Waypoint (lat, lon, ele, t, name, description)

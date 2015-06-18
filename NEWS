@@ -1,0 +1,32 @@
+Version 1.2.0, 2011-10-09:
+
+	* new classes LatLon, CourseDistance, Linestring, Route, RoutePoint
+	* full Python 3 compatibility
+	* changed earth radius from 6370 km to 6371 km
+	* additional attributes for tracks and routes (comment, source, number, type)
+	* new method "cast" in most classes: TrackSegments can be cast to Routes,
+	  Waypoints can be cast to TrackPoints, etc.
+
+Version 1.1.1, 2011-09-23:
+
+	* bugfixes in several constructors (thanks to Luke Whittlesey and Michael Gorven)
+
+Version 1.1.0, 2011-02-24:
+
+	* transversal Mercator projection
+	* TrackSegment.simplify()
+	* utility functions moved from global namespace to new class Util
+	* added some Python special methods
+
+Version 1.0.3, 2011-02-14:
+
+	* use dateutil instead of mx.DateTime
+
+Version 1.0.2, 2011-02-03:
+
+	* better PyPI integration
+
+Version 1.0.1, 2011-02-02:
+
+	* bugfix in TrackSegment.__init__
+	* Python 3.x compatibility

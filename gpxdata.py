@@ -671,7 +671,12 @@ class Document:
         """
         parse KML DOM
         """
-        doc = dom.getElementsByTagName('Document')[0]
+        if len (dom.getElementsByTagName('Document')) > 0:
+        	doc = dom.getElementsByTagName('Document')[0]
+        elif len (dom.getElementsByTagName('Folder')) > 0:
+            doc = dom.getElementsByTagName('Folder')[0]
+        else:
+            raise ValueError("There are no documents or folders found in the KML file")
         name = '(unnamed)'
         for e in doc.getElementsByTagName('name'):
             name = e.childNodes[0].data.strip()

@@ -3,7 +3,7 @@
 
 from distutils.core import setup
 
-__version__ = '1.2.0'
+__version__ = '1.3.1'
 
 setup(name='gpxdata',
       version=__version__,
@@ -11,7 +11,7 @@ setup(name='gpxdata',
       author='Frank Pählke',
       author_email='frank@kette-links.de',
       url='http://www.kette-links.de/technik/',
-      download_url='http://www.kette-links.de/software/gpxdata-'+__version__+'.tar.gz',
+      download_url='https://github.com/MauriceS/gpxdata/archive/'+__version__+'.tar.gz',
       classifiers=[
           'Development Status :: 4 - Beta',
           'Environment :: Console',

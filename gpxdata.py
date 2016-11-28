@@ -320,9 +320,9 @@ class LatLon:
         positive: q is "right of p"
         negative: q is "left of p"
         """
-        res = (course(self,q) - course(self,p)) % 360
+        res = (self.course(q) - self.course(p)) % 360
         if res > 180:
-            res -= 180
+            res -= 360
         return res
         
     def transMercator (self, centerlon=0.0):
@@ -333,11 +333,11 @@ class LatLon:
         """
         return Util.transMercator(self.lat, self.lon, centerlon)
 
-    def __eq__ (self, c):
-        return (self.__class__ == c.__class__ and self._lat == p._lat and self._lon == p._lon)
+    def __eq__ (self, p):
+        return (self.__class__ == p.__class__ and self._lat == p._lat and self._lon == p._lon)
 
-    def __ne__ (self, c):
-        return not (self == c)
+    def __ne__ (self, p):
+        return not (self == p)
 
     def __hash__ (self):
         return hash((self._lat, self._lon))

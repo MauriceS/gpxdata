@@ -1,12 +1,12 @@
 Metadata-Version: 1.1
 Name: gpxdata
-Version: 1.2.0
+Version: 1.3.1
 Summary: Object-Oriented representation of GPX documents and conversion utilities between GPX, KML and OVL
 Home-page: http://www.kette-links.de/technik/
 Author: Frank Pählke
 Author-email: frank@kette-links.de
 License: UNKNOWN
-Download-URL: http://www.kette-links.de/software/gpxdata-1.2.0.tar.gz
+Download-URL: https://github.com/MauriceS/gpxdata/archive/1.3.1.tar.gz'
 Description: UNKNOWN
 Platform: UNKNOWN
 Classifier: Development Status :: 4 - Beta
